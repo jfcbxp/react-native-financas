@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
 import {
   AreaInput,
   Background,
@@ -8,11 +8,13 @@ import {
   SubmitButton,
   SubmitText,
 } from "./styles";
+import { AuthContext } from "../../contexts/auth.provider";
 
 const SignUp = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const user = useContext(AuthContext);
   return (
     <Background>
       <Container>

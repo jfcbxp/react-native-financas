@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
 import {
   AreaInput,
   Background,
@@ -13,12 +13,14 @@ import {
 } from "./styles";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/RootStackParamList";
+import { AuthContext } from "../../contexts/auth.provider";
 
 interface Props extends NativeStackScreenProps<RootStackParamList, "SignIn"> {}
 
 const SignIn = ({ navigation }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const user = useContext(AuthContext);
 
   return (
     <Background>
