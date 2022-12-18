@@ -14,7 +14,12 @@ const SignUp = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const user = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+
+  const handleSingUp = () => {
+    authContext.signUp(email, password, nome);
+  };
+
   return (
     <Background>
       <Container>
@@ -43,12 +48,13 @@ const SignUp = () => {
             placeholder="Senha"
             autoCorrect={false}
             autoCapitalize="none"
+            secureTextEntry={true}
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton onPress={handleSingUp}>
           <SubmitText>Cadastrar</SubmitText>
         </SubmitButton>
       </Container>
