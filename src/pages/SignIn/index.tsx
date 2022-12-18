@@ -20,7 +20,11 @@ interface Props extends NativeStackScreenProps<RootStackParamList, "SignIn"> {}
 const SignIn = ({ navigation }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const user = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+
+  const handleSingIn = () => {
+    authContext.signIn(email, password);
+  };
 
   return (
     <Background>
@@ -40,6 +44,7 @@ const SignIn = ({ navigation }: Props) => {
         <AreaInput>
           <Input
             placeholder="Senha"
+            secureTextEntry={true}
             autoCorrect={false}
             autoCapitalize="none"
             value={password}
@@ -47,7 +52,7 @@ const SignIn = ({ navigation }: Props) => {
           />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton onPress={handleSingIn}>
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 
