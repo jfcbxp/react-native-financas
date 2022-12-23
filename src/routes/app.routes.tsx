@@ -1,13 +1,34 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import Home from "../pages/Home";
+import New from "../pages/New";
+import Profile from "../pages/Profile";
 import { RootStackParamList } from "../types/RootStackParamList";
 
 const AppRoutes = () => {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const Drawer = createDrawerNavigator<RootStackParamList>();
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
-    </Stack.Navigator>
+    <Drawer.Navigator
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "#171717",
+          width: 240,
+        },
+        drawerLabelStyle: {
+          fontWeight: "bold",
+        },
+        drawerActiveTintColor: "#FFF",
+        drawerActiveBackgroundColor: "#00b94a",
+        drawerInactiveBackgroundColor: "#000",
+        drawerInactiveTintColor: "#DDD",
+        drawerItemStyle: {
+          marginVertical: 5,
+        },
+      }}
+    >
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="New" component={New} />
+      <Drawer.Screen name="Profile" component={Profile} />
+    </Drawer.Navigator>
   );
 };
 

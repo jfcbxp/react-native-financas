@@ -45,9 +45,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       .catch((error) => {
         if (error.code === "auth/weak-password") {
           alert("informe uma senha mais forte");
-        }
-        if (error.code === "auth/invalid-email") {
+        } else if (error.code === "auth/invalid-email") {
           alert("email invalido.");
+        } else {
+          alert(error);
         }
       });
   };
