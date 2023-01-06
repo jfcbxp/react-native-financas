@@ -9,6 +9,8 @@ const AppRoutes = () => {
   return (
     <Drawer.Navigator
       screenOptions={{
+        headerShown: false,
+        headerTransparent: true,
         drawerStyle: {
           backgroundColor: "#171717",
           width: 240,

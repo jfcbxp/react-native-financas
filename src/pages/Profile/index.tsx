@@ -11,6 +11,7 @@ import {
   Logout,
   LogoutText,
 } from "./styles";
+import Header from "../../components/Header";
 
 interface Props extends NativeStackScreenProps<RootStackParamList, "Profile"> {}
 
@@ -19,6 +20,7 @@ const Profile = ({ navigation }: Props) => {
 
   return (
     <Container>
+      <Header />
       <Nome>{authContext.user && authContext.user.nome}</Nome>
       <NewLink onPress={() => navigation.navigate("New")}>
         <NewText>Registrar gastos</NewText>

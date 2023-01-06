@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { Container, ButtonMenu } from "./styles";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 type Props = {};
 
 const Header = (props: Props) => {
+  const navigation = useNavigation();
   return (
-    <View>
-      <Text>Header</Text>
-    </View>
+    <Container>
+      <ButtonMenu
+        onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      >
+        <Ionicons name="md-menu" size={32} color="#FFF" />
+      </ButtonMenu>
+    </Container>
   );
 };
 
 export default Header;
-
-const styles = StyleSheet.create({});
