@@ -1,4 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import CustomDrawer from "../components/CustomDrawer";
 import Home from "../pages/Home";
 import New from "../pages/New";
 import Profile from "../pages/Profile";
@@ -8,6 +9,7 @@ const AppRoutes = () => {
   const Drawer = createDrawerNavigator<RootStackParamList>();
   return (
     <Drawer.Navigator
+      drawerContent={CustomDrawer}
       screenOptions={{
         headerShown: false,
         headerTransparent: true,
