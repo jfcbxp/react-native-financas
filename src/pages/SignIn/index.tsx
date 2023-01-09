@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import React, { useContext, useState } from "react";
 import {
   AreaInput,
@@ -65,5 +64,3 @@ const SignIn = ({ navigation }: Props) => {
 };
 
 export default SignIn;
-
-const styles = StyleSheet.create({});

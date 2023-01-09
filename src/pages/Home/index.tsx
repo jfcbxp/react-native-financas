@@ -1,14 +1,25 @@
-import { Alert, Button, ListRenderItem, StyleSheet } from "react-native";
+import { Alert, ListRenderItem, Platform } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/RootStackParamList";
 import { AuthContext } from "../../contexts/auth.provider";
 import Header from "../../components/Header";
-import { Background, Container, List, Nome, Saldo, Title } from "./styles";
+import {
+  Background,
+  Container,
+  List,
+  Nome,
+  Saldo,
+  Title,
+  Area,
+} from "./styles";
 import { Historico } from "../../models/historico.model";
 import HistoricoList from "../../components/HistoricoList";
 import { realtime } from "../../services/firebase.service";
 import { format } from "date-fns";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import DatePicker from "../../components/DatePicker";
 
 interface Props extends NativeStackScreenProps<RootStackParamList, "Home"> {}
 
@@ -16,6 +27,8 @@ const Home = ({ navigation }: Props) => {
   const [historico, setHistorico] = useState<Historico[]>([]);
   const [saldo, setSaldo] = useState(0);
   const authContext = useContext(AuthContext);
+  const [newDate, setNewDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   const renderItem: ListRenderItem<Historico> = ({ item }) => (
     <HistoricoList data={item} deleteItem={handleDelete} />
@@ -36,7 +49,7 @@ const Home = ({ navigation }: Props) => {
         .ref("historico")
         .child(authContext.user.uid)
         .orderByChild("date")
-        .equalTo(format(new Date(), "dd/MM/yyyy"))
+        .equalTo(format(newDate, "dd/MM/yyyy"))
         .limitToLast(10)
         .on("value", (snapshot) => {
           setHistorico([]);
@@ -51,7 +64,7 @@ const Home = ({ navigation }: Props) => {
           });
         });
     }
-  }, []);
+  }, [newDate]);
 
   const handleDelete = (item: Historico) => {
     Alert.alert(
@@ -91,6 +104,19 @@ const Home = ({ navigation }: Props) => {
     }
   };
 
+  const handleShowPicker = () => {
+    setShow(true);
+  };
+
+  const handleClosePicker = () => {
+    setShow(false);
+  };
+
+  const handleChangePicker = (date: Date) => {
+    setShow(Platform.OS === "ios");
+    setNewDate(date);
+  };
+
   return (
     <Background>
       <Header />
@@ -98,12 +124,23 @@ const Home = ({ navigation }: Props) => {
         <Nome>{authContext.user?.nome}</Nome>
         <Saldo>R$ {saldo.toFixed(2)}</Saldo>
       </Container>
+      <Area>
+        <TouchableOpacity onPress={handleShowPicker}>
+          <Ionicons name="calendar" size={32} color="#FFF" />
+        </TouchableOpacity>
+      </Area>
 
       <Title>Ultimas movimentações</Title>
 
       <List data={historico} keyExtractor={keyItem} renderItem={renderItem} />
 
-      <Button title="Deslogar" onPress={() => authContext.signOut()} />
+      {show && (
+        <DatePicker
+          onClose={handleClosePicker}
+          date={newDate}
+          onChangeDate={handleChangePicker}
+        />
+      )}
     </Background>
   );
 };

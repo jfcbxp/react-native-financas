@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import React, { useContext } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/RootStackParamList";
@@ -34,5 +33,3 @@ const Profile = ({ navigation }: Props) => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({});

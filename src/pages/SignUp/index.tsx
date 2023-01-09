@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import React, { useContext, useState } from "react";
 import {
   AreaInput,
@@ -63,5 +62,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
-const styles = StyleSheet.create({});

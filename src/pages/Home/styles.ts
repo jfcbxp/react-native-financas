@@ -26,9 +26,15 @@ export const Saldo = styled.Text`
 `;
 
 export const Title = styled.Text`
-  margin-left: 15px;
+  margin-left: 5px;
   color: #00b94a;
   margin-bottom: 10px;
+`;
+
+export const Area = styled.View`
+  flex-direction: row;
+  margin-left: 15px;
+  align-items: baseline;
 `;
 
 export const List = styled.FlatList<ListRenderItem<Historico>>({
