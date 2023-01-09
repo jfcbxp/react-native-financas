@@ -2,6 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawer from "../components/CustomDrawer";
 import Home from "../pages/Home";
 import New from "../pages/New";
+import Photo from "../pages/Photo";
 import Profile from "../pages/Profile";
 import { RootStackParamList } from "../types/RootStackParamList";
 
@@ -32,6 +33,7 @@ const AppRoutes = () => {
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="New" component={New} />
       <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="Photo" component={Photo} />
     </Drawer.Navigator>
   );
 };
