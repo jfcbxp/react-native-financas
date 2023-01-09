@@ -12,6 +12,9 @@ import {
   MEASUREMENT_ID,
   DATABASE_URL,
 } from "@env";
+import { initializeAuth } from "firebase/auth";
+import { getReactNativePersistence } from "firebase/auth/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -23,12 +26,16 @@ const firebaseConfig = {
   measurementId: MEASUREMENT_ID,
   databaseURL: DATABASE_URL,
 };
-firebase.initializeApp(firebaseConfig);
+const fireApp = firebase.initializeApp(firebaseConfig);
 
-export const firebaseAuth = firebase.auth();
+initializeAuth(fireApp, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 
-export const firestore = firebase.firestore();
+export const firebaseAuth = fireApp.auth();
 
-export const realtime = firebase.database();
+export const firestore = fireApp.firestore();
 
-export default firebase;
+export const realtime = fireApp.database();
+
+export default fireApp;

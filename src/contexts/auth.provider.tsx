@@ -30,17 +30,34 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    AsyncStorage.getItem("user")
-      .then((result) => result && setUser(JSON.parse(result)))
-      .finally(() => setLoading(false));
-  }, [user]);
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        //if (user.emailVerified) {
+        AsyncStorage.getItem("user").then(async (result) => {
+          if (result) {
+            let usuario: User = JSON.parse(result);
+            setUser(usuario);
+          }
+        });
+        //} else {
+        //  firebaseAuth.signOut();
+        //  alert("Você ainda não verificou seu [email].");
+        //}
+      } else {
+        firebaseAuth.signOut();
+      }
+      setLoading(false);
+    });
+  }, []);
 
   const signUp = async (_email: string, _password: string, _nome: string) => {
     setLoading(true);
     firebaseAuth
       .createUserWithEmailAndPassword(_email, _password)
       .then(async (result) => {
-        result.user && _userRegister(result.user.uid, _email, _nome);
+        if (result.user) {
+          _userRegister(result.user.uid, _email, _nome);
+        }
       })
       .catch((error) => {
         if (error.code === "auth/weak-password") {
@@ -50,6 +67,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           alert(error);
         }
+        setLoading(false);
       });
   };
 
@@ -63,7 +81,12 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         saldo: 0,
       })
       .then(() => {
-        let _user: User = { uid: _uid, nome: _nome, email: _email, saldo: 0 };
+        let _user: User = {
+          uid: _uid,
+          nome: _nome,
+          email: _email,
+          saldo: 0,
+        };
         _storeUser(_user);
       });
   };
@@ -73,10 +96,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     firebaseAuth
       .signInWithEmailAndPassword(_email, _password)
       .then(async (result) => {
-        result.user && _getUserRegister(result.user.uid);
+        if (result.user) {
+          _getUserRegister(result.user.uid);
+        }
       })
       .catch((error) => {
         alert(error.code);
+        setLoading(false);
       });
   };
 
