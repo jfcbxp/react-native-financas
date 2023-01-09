@@ -1,4 +1,4 @@
-import { Button, ListRenderItem, StyleSheet } from "react-native";
+import { Alert, Button, ListRenderItem, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/RootStackParamList";
@@ -18,7 +18,7 @@ const Home = ({ navigation }: Props) => {
   const authContext = useContext(AuthContext);
 
   const renderItem: ListRenderItem<Historico> = ({ item }) => (
-    <HistoricoList data={item} />
+    <HistoricoList data={item} deleteItem={handleDelete} />
   );
   const keyItem: (item: Historico) => string = (item: Historico) =>
     item.key.toString();
@@ -36,7 +36,7 @@ const Home = ({ navigation }: Props) => {
         .ref("historico")
         .child(authContext.user.uid)
         .orderByChild("date")
-        .equalTo(format(new Date(), "dd/MM/yy"))
+        .equalTo(format(new Date(), "dd/MM/yyyy"))
         .limitToLast(10)
         .on("value", (snapshot) => {
           setHistorico([]);
@@ -45,12 +45,51 @@ const Home = ({ navigation }: Props) => {
               key: item.key!,
               tipo: item.val().tipo,
               valor: item.val().valor,
+              date: item.val().date,
             };
             setHistorico((oldHistorico) => [...oldHistorico, hist].reverse());
           });
         });
     }
   }, []);
+
+  const handleDelete = (item: Historico) => {
+    Alert.alert(
+      "Cuidado Atenção",
+      `Você deseja excluir ${item.tipo} - Valor ${item.valor}`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Continuar",
+          onPress: () => handleDeleteSuccess(item),
+        },
+      ]
+    );
+  };
+
+  const handleDeleteSuccess = async (item: Historico) => {
+    if (authContext.user) {
+      await realtime
+        .ref("historico")
+        .child(authContext.user.uid)
+        .child(item.key)
+        .remove();
+
+      let saldoAtual = saldo;
+      item.tipo === "despesa"
+        ? (saldoAtual += item.valor)
+        : (saldoAtual += item.valor);
+
+      await realtime
+        .ref("users")
+        .child(authContext.user.uid)
+        .child("saldo")
+        .set(saldoAtual);
+    }
+  };
 
   return (
     <Background>
@@ -70,5 +109,3 @@ const Home = ({ navigation }: Props) => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({});

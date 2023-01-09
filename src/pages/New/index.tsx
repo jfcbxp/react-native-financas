@@ -51,7 +51,7 @@ const New = ({ navigation }: Props) => {
       .set({
         tipo: tipo,
         valor: parseFloat(valor),
-        date: format(new Date(), "dd/MM/yy"),
+        date: format(new Date(), "dd/MM/yyyy"),
       });
 
     let user = realtime.ref("users").child(uuid);
